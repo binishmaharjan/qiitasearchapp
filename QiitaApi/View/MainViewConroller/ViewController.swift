@@ -23,6 +23,7 @@ class ViewController: UIViewController {
   
   func setup(){
     self.view.backgroundColor = .white
+    self.title = "Qiita"
     
     do{
       let showButton = UIButton(type: .system)
