@@ -31,21 +31,21 @@ class CustomListCellView: BaseView {
       self.addSubview(imageView)
       self.imageView = imageView
       imageView.backgroundColor = UIColor.lightGray
-      imageView.layer.borderWidth = 1
       imageView.contentMode = .scaleAspectFill
     }
     do{
       let lbl = UILabel()
       self.addSubview(lbl)
       self.lbl = lbl
-      lbl.layer.borderWidth = 1
+      lbl.textColor = Colors.titleBlue
       lbl.numberOfLines = 0
     }
     do{
       let lbl = UILabel()
       self.addSubview(lbl)
       self.nameLabel = lbl
-      lbl.layer.borderWidth = 1
+      lbl.textColor = Colors.titleGray
+      lbl.font = UIFont.boldSystemFont(ofSize: 16)
       lbl.numberOfLines = 0
     }
   }
