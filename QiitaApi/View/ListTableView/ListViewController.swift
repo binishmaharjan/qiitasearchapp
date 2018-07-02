@@ -13,6 +13,7 @@ class ListViewController: UIViewController {
   var baseView :UIView?
   var tableView : ListTableView?
   var articleArray : [Article]?
+  var activityIndicator : UIActivityIndicatorView?
   var errorMessage = ""
 
     override func viewDidLoad() {
@@ -36,7 +37,13 @@ class ListViewController: UIViewController {
       let tableView = ListTableView()
       self.view.addSubview(tableView)
       self.tableView = tableView
+      tableView.delegate = self
       tableView.backgroundColor = .white
+    }
+    do{
+      let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+      self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: activityIndicator)
+      self.activityIndicator = activityIndicator
     }
   }
   
@@ -158,33 +165,48 @@ class ListViewController: UIViewController {
         DispatchQueue.main.async {
           // インジケーター停止
           UIApplication.shared.isNetworkActivityIndicatorVisible = false
+          self.activityIndicator?.stopAnimating()
           self.loadData()
         }
     }
     )
     
-    DispatchQueue.global(qos: .default).async { // ネットが重い時のシミュレーション
-      for _ in 0..<50000 {
-        for _ in 0..<10000 {
-          
-        }
-      }
+//    DispatchQueue.global(qos: .default).async { // ネットが重い時のシミュレーション
+//      for _ in 0..<50000 {
+//        for _ in 0..<10000 {
+//
+//        }
+//      }
+//      task.resume()
+//    }
+    
       // タスク実行
       task.resume()
-    }
-    
     // インジケーター開始
     UIApplication.shared.isNetworkActivityIndicatorVisible = true
+    self.activityIndicator?.startAnimating()
 
   }
 }
 
+//MARK:- List View Delegate
+extension ListViewController : ListViewDelegate{
+  func itemIsClicked(url : String) {
+    let safariViewController = SafariViewController()
+    safariViewController.url = url
+    self.navigationController?.pushViewController(safariViewController, animated: true)
+  }
+  
+  
+}
 
+//MARK:- Error Message
 extension ListViewController{
   internal func showErrorMessage() {
     DispatchQueue.main.async {
       // インジケーター停止
       UIApplication.shared.isNetworkActivityIndicatorVisible = false
+      self.activityIndicator?.stopAnimating()
       // テーブルビュー再描画
       self.tableView?.tableView?.reloadData()
     }

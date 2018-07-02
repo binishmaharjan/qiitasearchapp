@@ -23,6 +23,7 @@
 		ACCB937120E756E7006789E5 /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACCB937020E756E7006789E5 /* SafariView.swift */; };
 		ACCB937420E8ACDD006789E5 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACCB937320E8ACDD006789E5 /* NavigationController.swift */; };
 		ACCB937620E8B12E006789E5 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACCB937520E8B12E006789E5 /* Colors.swift */; };
+		ACCB937820E90910006789E5 /* ListViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACCB937720E90910006789E5 /* ListViewDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		ACCB937020E756E7006789E5 /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
 		ACCB937320E8ACDD006789E5 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		ACCB937520E8B12E006789E5 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		ACCB937720E90910006789E5 /* ListViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +149,7 @@
 			children = (
 				ACCB935520E5C054006789E5 /* ListViewController.swift */,
 				ACCB935B20E5C246006789E5 /* ListTableView.swift */,
+				ACCB937720E90910006789E5 /* ListViewDelegate.swift */,
 			);
 			path = ListTableView;
 			sourceTree = "<group>";
@@ -250,6 +253,7 @@
 				ACCB934620E5B995006789E5 /* ViewController.swift in Sources */,
 				ACCB935C20E5C246006789E5 /* ListTableView.swift in Sources */,
 				ACCB934420E5B995006789E5 /* AppDelegate.swift in Sources */,
+				ACCB937820E90910006789E5 /* ListViewDelegate.swift in Sources */,
 				ACCB937620E8B12E006789E5 /* Colors.swift in Sources */,
 				ACCB935620E5C054006789E5 /* ListViewController.swift in Sources */,
 				ACCB937120E756E7006789E5 /* SafariView.swift in Sources */,

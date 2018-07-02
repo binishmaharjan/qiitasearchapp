@@ -19,7 +19,6 @@ class ViewController: UIViewController {
     setupConstraints()
     
   }
-
   
   func setup(){
     self.view.backgroundColor = .white

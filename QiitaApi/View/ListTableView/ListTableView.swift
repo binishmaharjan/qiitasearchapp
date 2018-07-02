@@ -17,6 +17,7 @@ class ListTableView : BaseView{
   
   var tableView : UITableView?
   var errorMessage = ""
+  var delegate : ListViewDelegate?
   
   var articleArray: [Article]?{
     didSet{
@@ -58,6 +59,7 @@ class ListTableView : BaseView{
 }
 
 
+//MARK:- TableView Delegate and Datasource
 extension ListTableView : UITableViewDelegate, UITableViewDataSource{
   
   func numberOfSections(in tableView: UITableView) -> Int {
@@ -108,6 +110,14 @@ extension ListTableView : UITableViewDelegate, UITableViewDataSource{
     cell?.mainView?.imageView?.image = iconImage
   
     return cell!
+  }
+  
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    guard  let delegate = self.delegate,
+            let articleArray = self.articleArray else {return}
+    let article  = articleArray[indexPath.row]
+    delegate.itemIsClicked(url: article.url)
+    
   }
 
 }
