@@ -7,10 +7,11 @@
 //
 
 import UIKit
+import  StoreKit
 
 class ViewController: UIViewController {
   
-  var showButton : UIButton?
+  var mainView : MainView?
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -18,32 +19,27 @@ class ViewController: UIViewController {
     setup()
     setupConstraints()
     
+    
   }
   
   func setup(){
-    self.view.backgroundColor = .white
-    self.title = "Qiita"
-    
     do{
-      let showButton = UIButton(type: .system)
-      showButton.setTitle("Show", for: .normal)
-      showButton.addTarget(self, action: #selector(showButtonPressed), for: .touchUpInside)
-      self.view.addSubview(showButton)
-      self.showButton = showButton
+      self.view.backgroundColor = .white
+      self.title = "Qiita"
     }
+    do{
+      let mainView = MainView()
+      mainView.delegate = self
+      self.view.addSubview(mainView)
+      self.mainView = mainView
+    }
+
   }
   
   func setupConstraints(){
-    guard let showButton = self.showButton else{ return }
-    
+    guard let mainView = self.mainView else {return}
     do{
-      showButton.translatesAutoresizingMaskIntoConstraints = false
-      NSLayoutConstraint.activate([
-        showButton.heightAnchor.constraint(equalToConstant: 30),
-        showButton.widthAnchor.constraint(equalToConstant: 50),
-        showButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-        showButton.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)
-        ])
+       mainView.pinToEdges(view: self.view)
     }
   }
   
@@ -51,6 +47,16 @@ class ViewController: UIViewController {
     let listViewController = ListViewController()
     self.navigationController?.pushViewController(listViewController, animated: true)
   }
+  
+}
+
+extension ViewController : MainViewDelegate{
+  func searchButtonClicked(search: String) {
+    let listViewController = ListViewController()
+    listViewController.searchText  = search
+    self.navigationController?.pushViewController(listViewController, animated: true)
+  }
+  
   
 }
 

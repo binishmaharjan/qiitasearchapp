@@ -37,10 +37,12 @@ class ListTableView : BaseView{
       let tableView = UITableView()
       self.addSubview(tableView)
       self.tableView = tableView
+      tableView.backgroundColor = Colors.mainWhite
       tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
       tableView.register(CELL_CLASS, forCellReuseIdentifier: CELL_ID)
       tableView.delegate = self
       tableView.dataSource = self
+      
     }
   }
   
@@ -80,6 +82,7 @@ extension ListTableView : UITableViewDelegate, UITableViewDataSource{
     if let article = self.articleArray?[indexPath.row]{
       title = article.title
       name = article.user.id
+      cell?.mainView?.relayout()
       
       guard let imageURL = URL(string: article.user.profile_image_url) else {
         fatalError("imageURL Error!")
@@ -108,6 +111,7 @@ extension ListTableView : UITableViewDelegate, UITableViewDataSource{
     cell?.mainView?.nameLabel?.text = name
     cell?.mainView?.lbl?.text = title
     cell?.mainView?.imageView?.image = iconImage
+    cell?.mainView?.relayout()
   
     return cell!
   }
@@ -119,5 +123,24 @@ extension ListTableView : UITableViewDelegate, UITableViewDataSource{
     delegate.itemIsClicked(url: article.url)
     
   }
+  
+  func loadMore(){
+    delegate?.loadmore()
+  }
+}
 
+
+//MARK:- ScrollView Delegate
+//Detect the is the scroll view reached the end
+extension ListTableView :UIScrollViewDelegate{
+  func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    // UITableView only moves in one direction, y axis
+    let currentOffset = scrollView.contentOffset.y
+    let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
+    
+    // Change 10.0 to adjust the distance from bottom
+    if maximumOffset - currentOffset <= 10.0 {
+      self.loadMore()
+    }
+  }
 }

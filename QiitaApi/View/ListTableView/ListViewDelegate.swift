@@ -11,4 +11,5 @@ import UIKit
 
 protocol ListViewDelegate {
   func itemIsClicked(url : String)
+  func loadmore()
 }
