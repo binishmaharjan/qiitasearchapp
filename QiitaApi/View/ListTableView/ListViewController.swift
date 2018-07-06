@@ -13,8 +13,10 @@ class ListViewController: UIViewController {
   var baseView :UIView?
   var tableView : ListTableView?
   var articleArray : [Article]?
-  var activityIndicator : UIActivityIndicatorView?
   var errorMessage = ""
+  var searchText = ""
+  var page = "1"
+  var isLoading : Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,10 +29,13 @@ class ListViewController: UIViewController {
   
   private func setup(){
     do{
+      self.title = searchText
+    }
+    do{
       let baseView = UIView()
       self.view.addSubview(baseView)
       self.baseView = baseView
-      baseView.backgroundColor = .white
+      baseView.backgroundColor = Colors.mainWhite
     }
     
     do{
@@ -38,12 +43,7 @@ class ListViewController: UIViewController {
       self.view.addSubview(tableView)
       self.tableView = tableView
       tableView.delegate = self
-      tableView.backgroundColor = .white
-    }
-    do{
-      let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
-      self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: activityIndicator)
-      self.activityIndicator = activityIndicator
+      tableView.backgroundColor  = Colors.mainWhite
     }
   }
   
@@ -80,117 +80,45 @@ class ListViewController: UIViewController {
   }
   
   func loadFromApi(){
-    // リクエストパラメタの設定（方法２）
-    //      URLComponentsを用いて[URLQueryItem]型のパラメタを付加する（GETメソッド以外では必須）
-    // URL文字列作成
-    let urlString = "https://qiita.com/api/v2/items"
-    guard var urlComponents = URLComponents(string: urlString) else {
-      errorMessage = "通信エラー発生!"
-      print("URLString error")
-      self.showErrorMessage()
-      return
+    APILoader.loadData(page : page , matching: searchText, completion: { (articles) in
+      self.articleArray = articles
+      DispatchQueue.main.async {
+        self.loadData()
+      }
+    }) { (errorMessage) in
+      self.errorMessage = errorMessage!
+      SKActivityIndicator.dismiss()
+      DispatchQueue.main.async {
+        self.showErrorMessage()
+      }
     }
-    let queryItemsArray = [URLQueryItem(name: "page", value: "1"),
-                           URLQueryItem(name: "per_page", value: "20"),
-                           URLQueryItem(name: "query", value: "swift")]
-    urlComponents.queryItems = queryItemsArray
-    // URL型に変換
-    guard let url = urlComponents.url else {
-      errorMessage = "通信エラー発生!"
-      print("URLComponents error")
-      self.showErrorMessage()
-      return
-    }
-    
-    
-    // URLRequest作成
-    var request = URLRequest(url: url)
-    
-    // HTTPメソッドの設定
-    request.httpMethod = "GET"
-    
-    // URLRequestにリクエストヘッダを付加
-    request.addValue("application/json", forHTTPHeaderField: "Accept")
-    //request.addValue("Bearer あなたのアクセストークン", forHTTPHeaderField: "Authorization")
-    
-    
-    // URLSessionオブジェクト初期化とタスクの設定
-    let session = URLSession.shared
-    
-    let task = session.dataTask(
-      with: request,
-      completionHandler: { data, response, error in
-        
-        guard let urlResponse = response else {
-          self.errorMessage = "通信エラー発生!"
-          print("Response nil")
-          self.showErrorMessage()
-          return
-        }
-        guard let httpResponse = urlResponse as? HTTPURLResponse else {
-          self.errorMessage = "通信エラー発生!"
-          print("HTTPURLResponse type error")
-          self.showErrorMessage()
-          return
-        }
-        if httpResponse.statusCode < 200 || httpResponse.statusCode >= 300 {
-          self.errorMessage = "通信エラー発生!"
-          print("Status code is \(httpResponse.statusCode)")
-          self.showErrorMessage()
-          return
-        }
-        print("レスポンスヘッダ：\(httpResponse.allHeaderFields)")
-        
-        // Data型から配列を得て、structにマッピングする（パース）
-        guard let responseData = data else {
-          self.errorMessage = "通信エラー発生!"
-          print("Response data nil")
-          self.showErrorMessage()
-          return
-        }
-        do {
-          self.articleArray = try
-            JSONDecoder().decode([Article].self, from: responseData)
-        } catch {
-          self.errorMessage = "通信エラー発生!"
-          print("JSON decode error")
-          print(error.localizedDescription)
-          self.showErrorMessage()
-        }
-        // 検索結果が0件なら、エラーメッセージに表示する（通信は正常終了）
-        if self.articleArray?.count == 0 {
-          self.errorMessage = "データ0件"
-        }
-        // テーブルビューの再描画
-        DispatchQueue.main.async {
-          // インジケーター停止
-          UIApplication.shared.isNetworkActivityIndicatorVisible = false
-          self.activityIndicator?.stopAnimating()
-          self.loadData()
-        }
-    }
-    )
-    
-//    DispatchQueue.global(qos: .default).async { // ネットが重い時のシミュレーション
-//      for _ in 0..<50000 {
-//        for _ in 0..<10000 {
-//
-//        }
-//      }
-//      task.resume()
-//    }
-    
-      // タスク実行
-      task.resume()
-    // インジケーター開始
-    UIApplication.shared.isNetworkActivityIndicatorVisible = true
-    self.activityIndicator?.startAnimating()
-
   }
 }
 
 //MARK:- List View Delegate
 extension ListViewController : ListViewDelegate{
+  func loadmore() {
+    if !isLoading { // Check if data is already loading, if not proceed
+      self.isLoading = true //Set is loading to true
+      self.page = String( Int(self.page)! + 1)
+      
+      APILoader.loadData(page: self.page, matching: searchText, completion: { (articles) in
+        DispatchQueue.main.async {
+          self.tableView?.articleArray?.append(contentsOf: articles)
+          self.isLoading = false // Set isLoading to false when data is loaded
+        }
+      }) { (errorMessage) in
+        self.errorMessage = errorMessage!
+        SKActivityIndicator.dismiss()
+        DispatchQueue.main.async {
+          self.showErrorMessage()
+          self.isLoading = false
+        }
+      }
+    }
+    
+  }
+  
   func itemIsClicked(url : String) {
     let safariViewController = SafariViewController()
     safariViewController.url = url
@@ -204,11 +132,8 @@ extension ListViewController : ListViewDelegate{
 extension ListViewController{
   internal func showErrorMessage() {
     DispatchQueue.main.async {
-      // インジケーター停止
-      UIApplication.shared.isNetworkActivityIndicatorVisible = false
-      self.activityIndicator?.stopAnimating()
       // テーブルビュー再描画
-      self.tableView?.tableView?.reloadData()
+      self.loadData()
     }
   }
 }

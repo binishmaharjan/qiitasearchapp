@@ -24,6 +24,7 @@ class CustomListCell : BaseTableViewCell{
     do{
       let mainView = CustomListCellView()
       self.addSubview(mainView)
+      mainView.backgroundColor = Colors.mainWhite
       self.mainView = mainView
     }
   }
