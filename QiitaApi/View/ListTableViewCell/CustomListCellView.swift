@@ -20,6 +20,7 @@ class CustomListCellView: BaseView {
   
   private var bottomToLabel : NSLayoutConstraint?
   private var bottomToImage : NSLayoutConstraint?
+  private var nameBottomToLabel : NSLayoutConstraint?
   
   override func didInit() {
     super.didInit()
@@ -85,26 +86,30 @@ class CustomListCellView: BaseView {
     }
     
     do{
-      lblBG.anchor(top: self.topAnchor, left: imageView.rightAnchor, right: self.rightAnchor, bottom: nil, paddingTop: 8, paddingLeft: 8, paddingRight: 8, paddingBottom: -8)
+      lblBG.anchor(top: nil, left: imageView.rightAnchor, right: self.rightAnchor, bottom: self.bottomAnchor, paddingTop: 8, paddingLeft: 8, paddingRight: 8, paddingBottom: -8)
     }
     do{
       lbl.pinToEdges(view: lblBG)
     }
     
     do{
-      nameLabelBG.anchor(top: nil, left: imageView.rightAnchor, right: self.rightAnchor, bottom: self.bottomAnchor, paddingTop: 8, paddingLeft: 8, paddingRight: 8, paddingBottom: -2)
+      nameLabelBG.anchor(top: self.topAnchor, left: imageView.rightAnchor, right: self.rightAnchor, bottom: nil, paddingTop: 8, paddingLeft: 8, paddingRight: 8, paddingBottom: -2)
     }
     do{
       titlelbl.pinToEdges(view: nameLabelBG)
     }
     
     do{
+      self.nameBottomToLabel = self.nameLabelBG?.bottomAnchor.constraint(equalTo: lblBG.topAnchor)
+      self.nameBottomToLabel?.priority = .defaultHigh
+      self.nameBottomToLabel?.isActive = false
+      
       self.bottomToImage = self.bottomAnchor.constraint(equalTo: imageView.bottomAnchor,constant :5)
       self.bottomToImage?.priority = .defaultHigh
       self.bottomToImage?.isActive = false
       
       
-      self.bottomToLabel = self.bottomAnchor.constraint(equalTo: nameLabelBG.bottomAnchor,constant :5)
+      self.bottomToLabel = self.bottomAnchor.constraint(equalTo: lblBG.bottomAnchor,constant :5)
       self.bottomToLabel?.priority = .defaultHigh
       self.bottomToLabel?.isActive = false
     }
@@ -112,7 +117,18 @@ class CustomListCellView: BaseView {
   
   func relayout(){
     guard let imageView = self.imageView,
+      let nameLabel = self.nameLabel,
       let lbl = self.lbl else {return}
+    
+    lbl.setNeedsLayout()
+    lbl.layoutIfNeeded()
+    nameLabel.setNeedsLayout()
+    nameLabel.layoutIfNeeded()
+    
+    self.nameBottomToLabel?.isActive = false
+    if nameLabel.frame.maxY > lbl.frame.minY {
+      self.nameBottomToLabel?.isActive = true
+    }
     
     lbl.setNeedsLayout()
     lbl.layoutIfNeeded()
@@ -120,6 +136,7 @@ class CustomListCellView: BaseView {
     self.bottomToImage?.isActive = false
     self.bottomToLabel?.isActive = false
     
+
     if imageView.frame.maxY > lbl.frame.maxY{
       self.bottomToImage?.isActive = true
     }else{

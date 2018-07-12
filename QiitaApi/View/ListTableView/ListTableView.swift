@@ -82,23 +82,28 @@ extension ListTableView : UITableViewDelegate, UITableViewDataSource{
     if let article = self.articleArray?[indexPath.row]{
       title = article.title
       name = article.user.id
-      cell?.mainView?.relayout()
       
       guard let imageURL = URL(string: article.user.profile_image_url) else {
         fatalError("imageURL Error!")
       }
-      var imageData = Data()
-      DispatchQueue.global(qos: .default).async {
-        do {
-          imageData = try Data(contentsOf: imageURL)
-        } catch {
-          print("imageURL Error! \(error.localizedDescription)")
-        }
-        DispatchQueue.main.async {
-          iconImage = UIImage(data: imageData)
-          cell?.mainView?.imageView?.image = iconImage
-          cell?.setNeedsLayout() // セルのみの再描画
-        }
+//      var imageData = Data()
+//      DispatchQueue.global(qos: .default).async {
+//        do {
+//          imageData = try Data(contentsOf: imageURL)
+//        } catch {
+//          print("imageURL Error! \(error.localizedDescription)")
+//        }
+//        DispatchQueue.main.async {
+//          iconImage = UIImage(data: imageData)
+//          cell?.mainView?.imageView?.image = iconImage
+//          cell?.setNeedsLayout() // セルのみの再描画
+//        }
+//      }
+      
+      CacheImageService.getImage(withURL: imageURL) { (image) in
+        iconImage = image
+        cell?.mainView?.imageView?.image = iconImage
+        cell?.setNeedsLayout()
       }
     }else{
       if errorMessage != "" { // エラーがある場合はエラーを表示

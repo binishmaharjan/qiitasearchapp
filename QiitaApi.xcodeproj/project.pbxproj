@@ -12,6 +12,7 @@
 		AC9E000820EB1A1000D595C7 /* SKActivityIndicatorStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9E000720EB1A1000D595C7 /* SKActivityIndicatorStyle.swift */; };
 		AC9E000B20EB238500D595C7 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9E000A20EB238500D595C7 /* UIApplication.swift */; };
 		AC9E000D20EB23CB00D595C7 /* AlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9E000C20EB23CB00D595C7 /* AlertController.swift */; };
+		ACAE288E20F6FD9400509D03 /* CacheImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACAE288D20F6FD9400509D03 /* CacheImageService.swift */; };
 		ACCB934420E5B995006789E5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACCB934320E5B995006789E5 /* AppDelegate.swift */; };
 		ACCB934620E5B995006789E5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACCB934520E5B995006789E5 /* ViewController.swift */; };
 		ACCB934B20E5B9A1006789E5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ACCB934A20E5B9A1006789E5 /* Assets.xcassets */; };
@@ -41,6 +42,7 @@
 		AC9E000720EB1A1000D595C7 /* SKActivityIndicatorStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKActivityIndicatorStyle.swift; sourceTree = "<group>"; };
 		AC9E000A20EB238500D595C7 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
 		AC9E000C20EB23CB00D595C7 /* AlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertController.swift; sourceTree = "<group>"; };
+		ACAE288D20F6FD9400509D03 /* CacheImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheImageService.swift; sourceTree = "<group>"; };
 		ACCB934020E5B995006789E5 /* QiitaApi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QiitaApi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACCB934320E5B995006789E5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ACCB934520E5B995006789E5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -99,6 +101,7 @@
 			isa = PBXGroup;
 			children = (
 				AC9E000020EB05ED00D595C7 /* APILoader.swift */,
+				ACAE288D20F6FD9400509D03 /* CacheImageService.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -314,6 +317,7 @@
 				ACCB938020E9EB80006789E5 /* MainViewDelegate.swift in Sources */,
 				ACCB937120E756E7006789E5 /* SafariView.swift in Sources */,
 				ACCB936620E5F2A5006789E5 /* Article.swift in Sources */,
+				ACAE288E20F6FD9400509D03 /* CacheImageService.swift in Sources */,
 				ACCB936F20E75662006789E5 /* SafariViewController.swift in Sources */,
 				ACCB937A20E9C631006789E5 /* MainView.swift in Sources */,
 				AC9E000620EB19E300D595C7 /* SKIndicator.swift in Sources */,
